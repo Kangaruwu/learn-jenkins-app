@@ -49,7 +49,7 @@ pipeline {
                     node_modules/.bin/serve -s build &
                     sleep 5
                     echo "Running end-to-end tests"
-                    npx playwright test
+                    npx playwright test --reporter=html
                 '''
             }
         }
