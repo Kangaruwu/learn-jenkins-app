@@ -31,7 +31,23 @@ pipeline {
             steps {
                 sh '''
                 echo "Running tests"
+                test -f build/index.html || (echo "Build failed, build/index.html not found" && exit 1)
                 npm test
+                '''
+            }
+        }
+        stage('E2E Tests') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.53.0-noble'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    npm install -g serve
+                    serve -s build
+                    npx playwright test
                 '''
             }
         }
